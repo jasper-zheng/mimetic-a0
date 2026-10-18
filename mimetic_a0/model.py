@@ -29,6 +29,16 @@ def _files(source: str, half: bool) -> tuple[Path, Path]:
     return Path(hf_hub_download(source, "model_config.json")), Path(hf_hub_download(source, weights))
 
 
+def _apg_on_cpu(project):
+    """stable-audio-tools' APG projection casts to float64, which MPS lacks: run it (small latents) on the CPU."""
+    def wrapped(v0, v1, padding_mask=None):
+        if padding_mask is not None:
+            padding_mask = padding_mask.cpu()
+        parallel, orthogonal = project(v0.cpu(), v1.cpu(), padding_mask=padding_mask)
+        return parallel.to(v0.device), orthogonal.to(v0.device)
+    return wrapped
+
+
 def load_model(source: str = REPO_ID, device: str | None = None, half: bool = False):
     """-> (model, config). `source` is a Hugging Face repo id or a folder holding model_config.json and
     model.safetensors. half=True loads the fp16 weights and runs in fp16 (less memory, faster on GPU and
@@ -41,4 +51,8 @@ def load_model(source: str = REPO_ID, device: str | None = None, half: bool = Fa
     model = model.to(device).eval().requires_grad_(False)
     if half:
         model = model.half()
+    if device == "mps":
+        for module in model.modules():
+            if hasattr(module, "apg_project"):
+                module.apg_project = _apg_on_cpu(module.apg_project)
     return model, config
