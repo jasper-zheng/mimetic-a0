@@ -48,9 +48,9 @@ def load_model(source: str = REPO_ID, device: str | None = None, half: bool = Fa
     config = json.loads(config_path.read_text())
     model = create_model_from_config(config)
     model.load_state_dict(load_ckpt_state_dict(str(weights_path)))
-    model = model.to(device).eval().requires_grad_(False)
     if half:
-        model = model.half()
+        model = model.half()  # before .to(device): the other order strands 0.75 GB of device memory
+    model = model.to(device).eval().requires_grad_(False)
     if device == "mps":
         for module in model.modules():
             if hasattr(module, "apg_project"):
