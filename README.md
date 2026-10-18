@@ -2,6 +2,17 @@
 
 A text-to-audio model for music, trained only on audio with a clean licence: Freesound clips released as CC0, and synthetic music rendered by our own procedural generators. It writes 48 kHz stereo, up to 16 s: drum loops, basslines, chords, melodies, pads, one-shots and full mixes, at the tempo, key and chords you ask for.
 
+**Speed.** A 12 s clip at 50 steps takes:
+
+| | fp32 (`model.safetensors`, 2.0 GB) | fp16 (`model.fp16.safetensors`, 1.0 GB) |
+|---|---|---|
+| NVIDIA RTX PRO 6000 | 1.7 s | 0.4 s |
+| Apple M1 Max (32 GB) | 6.7 s | 8.9 s |
+
+The fp16 version (`--half`) needs 2.5 GB of GPU memory against 4.4 GB for fp32. It is four times faster on an NVIDIA GPU; on a Mac it saves memory but is slower than fp32. Loading the model adds about 10 s to each command-line run; the web UI loads it once.
+
+**A base for fine-tuning.** mimetic-a0 is also intended as a base model for fine-tuning, and we will be releasing updates for this.
+
 This repo runs it: a command-line tool and a local web UI, on NVIDIA GPUs, Apple Silicon Macs (M1 and later) or the CPU. The weights are on Hugging Face: [micknoisemachine/mimetic-a0](https://huggingface.co/micknoisemachine/mimetic-a0). They download on first run.
 
 mimetic-a0 is version 0.1, an early release. Internally it is cc0-sampler v4 (checkpoint "anneal 120k").
