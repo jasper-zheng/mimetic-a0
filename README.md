@@ -91,11 +91,6 @@ single cello note, G3
 
 Set the duration to the bars you ask for: seconds = bars × 240 ÷ BPM. 50 steps and CFG 6 (the defaults) are what it was tested with. Results vary by seed, so ask for several variations.
 
-## Speed and memory
-
-The model has 511M parameters: a 326M diffusion transformer plus the autoencoder (VAE). Generating a 12 s clip on an M1 Max peaked at 4.1 GB of GPU memory in fp32 and 2.2 GB with `--half`; the Metal driver keeps more than this in its cache (6.7 GB and 3.3 GB). On CUDA, one clip peaked at 4.4 GB in fp32. On an RTX PRO 6000, a 12 s clip at 50 steps takes 1.7 s in fp32 and 0.4 s with `--half`. On an M1 Max MacBook Pro (32 GB) it takes 6.7 s in fp32 and the same with `--half`, so on a Mac `--half` only saves memory; loading the model adds about 10 s to each CLI run. The CPU works too: a 3 s clip took 18 s on a many-core workstation CPU.
-
-The same seed gives different audio on CUDA, Apple Silicon and the CPU, and with or without `--half`, because each draws its starting noise differently.
 
 ## Limits
 
