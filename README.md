@@ -2,7 +2,7 @@
 
 A text-to-audio model for music, trained only on audio with a clean licence: Freesound clips released as CC0, and synthetic music rendered by our own procedural generators. It writes 48 kHz stereo, up to 16 s: drum loops, basslines, chords, melodies, pads, one-shots and full mixes, at the tempo, key and chords you ask for.
 
-This repo runs it: a command-line tool and a local web UI, on NVIDIA GPUs, Apple Silicon Macs (M1 and later) or the CPU. The weights are on Hugging Face: [micknoise/mimetic-a0](https://huggingface.co/micknoise/mimetic-a0). They download on first run.
+This repo runs it: a command-line tool and a local web UI, on NVIDIA GPUs, Apple Silicon Macs (M1 and later) or the CPU. The weights are on Hugging Face: [micknoisemachine/mimetic-a0](https://huggingface.co/micknoisemachine/mimetic-a0). They download on first run.
 
 mimetic-a0 is version 0.1, an early release. Internally it is cc0-sampler v4 (checkpoint "anneal 120k").
 
@@ -56,13 +56,13 @@ From Python:
 ```python
 from mimetic_a0 import load_model, generate, bars_to_seconds
 
-model, config = load_model()              # micknoise/mimetic-a0 on the best device
+model, config = load_model()              # micknoisemachine/mimetic-a0 on the best device
 audio, seed = generate(model, config, "house drum loop, dance kit, open hi-hats, 124 BPM, 4 bars",
                        bars_to_seconds(4, 124), n=2)
 # audio: (2 takes, 2 channels, samples) float32 at 48 kHz
 ```
 
-The weights also load in stock stable-audio-tools (`get_pretrained_model("micknoise/mimetic-a0")`), at commit `3241adb` or later.
+The weights also load in stock stable-audio-tools (`get_pretrained_model("micknoisemachine/mimetic-a0")`), at commit `3241adb` or later.
 
 ## Prompting
 

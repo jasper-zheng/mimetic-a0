@@ -6,7 +6,7 @@ import torch
 from stable_audio_tools.models import create_model_from_config
 from stable_audio_tools.models.utils import load_ckpt_state_dict
 
-REPO_ID = "micknoise/mimetic-a0"
+REPO_ID = "micknoisemachine/mimetic-a0"
 
 
 def pick_device(name: str | None = None) -> str:

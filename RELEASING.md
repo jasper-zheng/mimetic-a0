@@ -95,10 +95,10 @@ The 14 clips in `release/examples/` were picked by automatic checks (CLAP instru
 
 ```bash
 uv tool install "huggingface_hub[cli]"     # provides `hf`
-hf auth login                               # the user pastes a micknoise write token
-hf auth whoami                              # must say micknoise
-hf repo create micknoise/mimetic-a0 --private
-hf upload micknoise/mimetic-a0 release . --commit-message "mimetic-a0 0.1"
+hf auth login                               # the user pastes a micknoisemachine write token
+hf auth whoami                              # must say micknoisemachine (the Hugging Face account; GitHub is micknoise)
+hf repo create micknoisemachine/mimetic-a0 --private
+hf upload micknoisemachine/mimetic-a0 release . --commit-message "mimetic-a0 0.1"
 ```
 
 Then check it from Hugging Face rather than the local folder, in a clean cache:
@@ -108,7 +108,7 @@ HF_HOME=$(mktemp -d) HF_TOKEN=$(cat ~/.cache/huggingface/token) \
   uv run mimetic-a0 "single grand piano note, C4, soft" --seconds 3 --seed 1 --out outs/hf
 ```
 
-It must download `model_config.json` and `model.safetensors` from `micknoise/mimetic-a0` and write a WAV. While the repo is private, the download needs the token; that is what the `HF_TOKEN` above is for. Check that the model card renders on the website, including the audio players in the Examples table. They use `resolve/main/examples/...` URLs, which only play for a logged-in owner while the repo is private.
+It must download `model_config.json` and `model.safetensors` from `micknoisemachine/mimetic-a0` and write a WAV. While the repo is private, the download needs the token; that is what the `HF_TOKEN` above is for. Check that the model card renders on the website, including the audio players in the Examples table. They use `resolve/main/examples/...` URLs, which only play for a logged-in owner while the repo is private.
 
 ## 6. Finish
 

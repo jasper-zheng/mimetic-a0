@@ -24,19 +24,19 @@ Unedited takes, 50 steps, CFG 6, one seed each.
 
 | Prompt | Length | Audio |
 |---|---|---|
-| `boom bap drum loop, standard kit, swung, with ghost notes, 90 BPM, 4 bars` | 10.67 s | <audio controls src="https://huggingface.co/micknoise/mimetic-a0/resolve/main/examples/boom-bap.wav"></audio> |
-| `house drum loop, dance kit, open hi-hats, 124 BPM, 4 bars` | 7.74 s | <audio controls src="https://huggingface.co/micknoise/mimetic-a0/resolve/main/examples/house.wav"></audio> |
-| `jazz swing drum loop, brush kit, heavily swung, 120 BPM, 2 bars` | 4 s | <audio controls src="https://huggingface.co/micknoise/mimetic-a0/resolve/main/examples/jazz-brushes.wav"></audio> |
-| `808 kit kick drum hit, one-shot, hard` | 1 s | <audio controls src="https://huggingface.co/micknoise/mimetic-a0/resolve/main/examples/808-kick.wav"></audio> |
-| `finger bass bassline, over Cm - Fm - G7, 95 BPM, C minor, 4 bars` | 10.11 s | <audio controls src="https://huggingface.co/micknoise/mimetic-a0/resolve/main/examples/finger-bass.wav"></audio> |
-| `warm pad held chords, chords Dm7 - G7 - Cmaj7, soft, 80 BPM, C major, 4 bars` | 12 s | <audio controls src="https://huggingface.co/micknoise/mimetic-a0/resolve/main/examples/warm-pad.wav"></audio> |
-| `analog mono lead synth melody, over Am - F - C - G, 110 BPM, A minor, 4 bars` | 8.73 s | <audio controls src="https://huggingface.co/micknoise/mimetic-a0/resolve/main/examples/analog-lead.wav"></audio> |
-| `marimba arpeggio, chords C - Am - F - G, 120 BPM, C major, 2 bars` | 4 s | <audio controls src="https://huggingface.co/micknoise/mimetic-a0/resolve/main/examples/marimba.wav"></audio> |
-| `single cello note, G3` | 3 s | <audio controls src="https://huggingface.co/micknoise/mimetic-a0/resolve/main/examples/cello-g3.wav"></audio> |
-| `grand piano chord, Cmaj7, block chord` | 3 s | <audio controls src="https://huggingface.co/micknoise/mimetic-a0/resolve/main/examples/piano-cmaj7.wav"></audio> |
-| `steel-string acoustic guitar chord, G, strummed` | 3 s | <audio controls src="https://huggingface.co/micknoise/mimetic-a0/resolve/main/examples/guitar-g.wav"></audio> |
-| `full mix with standard kit, finger bass and electric piano, hip hop, chords Fm7 - Bbm7, 88 BPM, Ab major, 4 bars` | 10.91 s | <audio controls src="https://huggingface.co/micknoise/mimetic-a0/resolve/main/examples/hip-hop-band.wav"></audio> |
-| `full mix with drum machine, synth bass and synth pad, house, Am7 chord, 124 BPM, root A, 4 bars` | 7.74 s | <audio controls src="https://huggingface.co/micknoise/mimetic-a0/resolve/main/examples/house-track.wav"></audio> |
+| `boom bap drum loop, standard kit, swung, with ghost notes, 90 BPM, 4 bars` | 10.67 s | <audio controls src="https://huggingface.co/micknoisemachine/mimetic-a0/resolve/main/examples/boom-bap.wav"></audio> |
+| `house drum loop, dance kit, open hi-hats, 124 BPM, 4 bars` | 7.74 s | <audio controls src="https://huggingface.co/micknoisemachine/mimetic-a0/resolve/main/examples/house.wav"></audio> |
+| `jazz swing drum loop, brush kit, heavily swung, 120 BPM, 2 bars` | 4 s | <audio controls src="https://huggingface.co/micknoisemachine/mimetic-a0/resolve/main/examples/jazz-brushes.wav"></audio> |
+| `808 kit kick drum hit, one-shot, hard` | 1 s | <audio controls src="https://huggingface.co/micknoisemachine/mimetic-a0/resolve/main/examples/808-kick.wav"></audio> |
+| `finger bass bassline, over Cm - Fm - G7, 95 BPM, C minor, 4 bars` | 10.11 s | <audio controls src="https://huggingface.co/micknoisemachine/mimetic-a0/resolve/main/examples/finger-bass.wav"></audio> |
+| `warm pad held chords, chords Dm7 - G7 - Cmaj7, soft, 80 BPM, C major, 4 bars` | 12 s | <audio controls src="https://huggingface.co/micknoisemachine/mimetic-a0/resolve/main/examples/warm-pad.wav"></audio> |
+| `analog mono lead synth melody, over Am - F - C - G, 110 BPM, A minor, 4 bars` | 8.73 s | <audio controls src="https://huggingface.co/micknoisemachine/mimetic-a0/resolve/main/examples/analog-lead.wav"></audio> |
+| `marimba arpeggio, chords C - Am - F - G, 120 BPM, C major, 2 bars` | 4 s | <audio controls src="https://huggingface.co/micknoisemachine/mimetic-a0/resolve/main/examples/marimba.wav"></audio> |
+| `single cello note, G3` | 3 s | <audio controls src="https://huggingface.co/micknoisemachine/mimetic-a0/resolve/main/examples/cello-g3.wav"></audio> |
+| `grand piano chord, Cmaj7, block chord` | 3 s | <audio controls src="https://huggingface.co/micknoisemachine/mimetic-a0/resolve/main/examples/piano-cmaj7.wav"></audio> |
+| `steel-string acoustic guitar chord, G, strummed` | 3 s | <audio controls src="https://huggingface.co/micknoisemachine/mimetic-a0/resolve/main/examples/guitar-g.wav"></audio> |
+| `full mix with standard kit, finger bass and electric piano, hip hop, chords Fm7 - Bbm7, 88 BPM, Ab major, 4 bars` | 10.91 s | <audio controls src="https://huggingface.co/micknoisemachine/mimetic-a0/resolve/main/examples/hip-hop-band.wav"></audio> |
+| `full mix with drum machine, synth bass and synth pad, house, Am7 chord, 124 BPM, root A, 4 bars` | 7.74 s | <audio controls src="https://huggingface.co/micknoisemachine/mimetic-a0/resolve/main/examples/house-track.wav"></audio> |
 
 ## Usage
 
@@ -55,7 +55,7 @@ import torch, torchaudio
 from stable_audio_tools import get_pretrained_model
 from stable_audio_tools.inference.generation import generate_diffusion_cond
 
-model, config = get_pretrained_model("micknoise/mimetic-a0")
+model, config = get_pretrained_model("micknoisemachine/mimetic-a0")
 model = model.to("cuda").eval()             # or "mps" on Apple Silicon
 bpm, bars = 90, 4
 seconds = bars * 240 / bpm
