@@ -11,6 +11,12 @@ A text-to-audio model for music, trained only on audio with a clean licence: Fre
 
 The fp16 version (`--half`) needs about half the memory: generating a 12 s clip on the M1 Max peaked at 2.2 GB in fp16 against 4.1 GB in fp32. It is four times faster on an NVIDIA GPU, whose tensor cores do fp16 arithmetic at several times the fp32 rate. On the M1 Max it runs at the same speed as fp32 and only saves memory: its GPU does fp16 matrix multiplication at the same rate as fp32 (we measured 7.1 and 6.6 TFLOPS), and the diffusion transformer's time is mostly matrix multiplication. Loading the model adds about 10 s to each command-line run; the web UI loads it once.
 
+- The model has 511M parameters: a 326M diffusion transformer plus the autoencoder (VAE).
+- The CPU works too: a 3 s clip took 18 s on a many-core workstation CPU.
+- The same seed gives different audio on CUDA, Apple Silicon and the CPU, and with or without `--half`, because each draws its starting noise differently.
+- On a Mac, the Metal driver keeps more memory than the model uses in its cache: 6.7 GB in fp32 and 3.3 GB in fp16.
+- On CUDA, one clip peaked at 4.4 GB in fp32.
+
 **A base for fine-tuning.** mimetic-a0 is also intended as a base model for fine-tuning, and we will be releasing updates for this.
 
 This repo runs it: a command-line tool and a local web UI, on NVIDIA GPUs, Apple Silicon Macs (M1 and later) or the CPU. The weights are on Hugging Face: [micknoisemachine/mimetic-a0](https://huggingface.co/micknoisemachine/mimetic-a0). They download on first run.
