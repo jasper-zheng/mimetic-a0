@@ -37,7 +37,6 @@ Unedited takes, 50 steps, CFG 6, one seed each.
 | `steel-string acoustic guitar chord, G, strummed` | 3 s | <audio controls src="https://huggingface.co/micknoise/mimetic-a0/resolve/main/examples/guitar-g.wav"></audio> |
 | `full mix with standard kit, finger bass and electric piano, hip hop, chords Fm7 - Bbm7, 88 BPM, Ab major, 4 bars` | 10.91 s | <audio controls src="https://huggingface.co/micknoise/mimetic-a0/resolve/main/examples/hip-hop-band.wav"></audio> |
 | `full mix with drum machine, synth bass and synth pad, house, Am7 chord, 124 BPM, root A, 4 bars` | 7.74 s | <audio controls src="https://huggingface.co/micknoise/mimetic-a0/resolve/main/examples/house-track.wav"></audio> |
-| `full mix with violins, cellos and basses, french horns and timpani, epic, chords Dm - Bb - C, 90 BPM, D minor, 4 bars` | 10.67 s | <audio controls src="https://huggingface.co/micknoise/mimetic-a0/resolve/main/examples/orchestra.wav"></audio> |
 
 ## Usage
 
