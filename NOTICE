@@ -1,0 +1,24 @@
+mimetic-a0
+Copyright (c) 2026 Mick Grierson. Released under the MIT License (see LICENSE).
+
+This release includes or depends on the following third-party work:
+
+ACE-Step 1.5 VAE (autoencoder weights, included in model.safetensors as "pretransform.*")
+  Source: https://huggingface.co/ACE-Step/Ace-Step1.5 (vae/)
+  License: MIT. Used frozen, converted bit-exactly to stable-audio-tools' layout.
+
+T5-base (text encoder; downloaded at run time, not included)
+  Source: https://huggingface.co/t5-base (Google)
+  License: Apache License 2.0
+
+stable-audio-tools (inference code; installed as a dependency, not included)
+  Source: https://github.com/Stability-AI/stable-audio-tools (commit 3241adb)
+  License: MIT
+
+Training data (not included; credited here):
+  - Freesound (https://freesound.org) clips released under Creative Commons 0 by their uploaders.
+    CC0 asks for no attribution; thanks to everyone who shares sounds there.
+  - Synthetic music rendered by the author's own procedural generators, partly through the
+    GeneralUser GS SoundFont v2.0.3 by S. Christian Collins (https://schristiancollins.com/generaluser),
+    which its author allows to be used "without restriction for your own music creation, private or
+    commercial". The author notes that the origin of some of its samples is uncertain.

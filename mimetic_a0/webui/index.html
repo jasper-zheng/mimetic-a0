@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>mimetic-a0</title>
+<style>
+  :root {
+    --bg: #14161a; --panel: #1c1f26; --border: #2c3038; --text: #e8e9ec; --muted: #8a8f9a;
+    --accent: #6ea8ff; --accent-dim: #3a5a8c; --ok: #5fd18b; --err: #ff6b6b; --sel: rgba(110,168,255,.22);
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg); color: var(--text); font: 14px/1.5 -apple-system, "Segoe UI", sans-serif;
+    margin: 0; padding: 24px; max-width: 920px; margin-inline: auto;
+  }
+  h1 { font-size: 18px; margin: 0 0 4px; }
+  h3 { font-size: 13px; margin: 0 0 8px; color: var(--text); font-weight: 600; }
+  .sub { color: var(--muted); margin: 0 0 20px; font-size: 13px; }
+  .topbar { display: flex; gap: 16px; align-items: center; margin-bottom: 20px; flex-wrap: wrap; }
+  select, input[type=text], input[type=number], textarea, input[type=file] {
+    background: #0f1115; border: 1px solid var(--border); color: var(--text);
+    border-radius: 6px; padding: 6px 8px; font: inherit; max-width: 100%;
+  }
+  textarea { width: 100%; resize: vertical; min-height: 46px; }
+  label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 3px; }
+  .field { margin-bottom: 12px; }
+  .row { display: flex; gap: 16px; flex-wrap: wrap; }
+  .row > .field { flex: 1; min-width: 140px; }
+  input[type=range] { width: 100%; accent-color: var(--accent); }
+  .rangeval { color: var(--accent); font-variant-numeric: tabular-nums; }
+  .tabs { display: flex; gap: 4px; margin-bottom: 16px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+  .tab { padding: 8px 16px; cursor: pointer; color: var(--muted); border-bottom: 2px solid transparent; user-select: none; }
+  .tab.active { color: var(--text); border-bottom-color: var(--accent); }
+  .panel { display: none; background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+  .panel.active { display: block; }
+  .intro { color: var(--muted); font-size: 13px; margin: 0 0 16px; }
+  .intro b { color: var(--text); font-weight: 600; }
+  .step { border-left: 2px solid var(--border); padding-left: 14px; margin-bottom: 16px; }
+  .step > .n { font-size: 11px; color: var(--accent); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 4px; }
+  button.go { background: var(--accent); color: #0a0e14; border: none; border-radius: 6px; padding: 9px 18px;
+              font-weight: 600; cursor: pointer; font-size: 14px; }
+  button.go:disabled { background: var(--accent-dim); cursor: default; }
+  details { margin: 12px 0; }
+  summary { cursor: pointer; color: var(--muted); font-size: 12px; }
+  .results { margin-top: 18px; display: flex; flex-direction: column; gap: 10px; }
+  .result { background: #12141a; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+  .result.orig { border-color: var(--accent-dim); }
+  .result .meta { color: var(--muted); font-size: 12px; margin-bottom: 6px; display: flex; justify-content: space-between; gap: 8px; }
+  audio { width: 100%; height: 32px; }
+  .status { margin-top: 10px; font-size: 12px; color: var(--muted); min-height: 16px; }
+  .status.err { color: var(--err); }
+  a.dl { color: var(--accent); text-decoration: none; font-size: 12px; }
+  .hint { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .warn { font-size: 12px; color: #e8c26b; margin: 0 0 12px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .chip { background: #0f1115; border: 1px solid var(--border); color: var(--text); border-radius: 14px;
+          padding: 3px 10px; font-size: 12px; cursor: pointer; user-select: none; }
+  .chip:hover { border-color: var(--accent); }
+  .chip.on { background: var(--accent-dim); border-color: var(--accent); }
+  .modes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 18px; }
+  .mode { border: 1px solid var(--border); border-radius: 8px; padding: 10px; cursor: pointer; background: #12141a; }
+  .mode b { display: block; font-size: 13px; margin-bottom: 2px; }
+  .mode span { font-size: 11px; color: var(--muted); }
+  .mode.on { border-color: var(--accent); background: #18202e; }
+  .slots { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 0 16px; }
+  .slots input[type=file] { width: 100%; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .wave { position: relative; height: 90px; background: #0f1115; border: 1px solid var(--border); border-radius: 6px;
+          cursor: crosshair; user-select: none; margin-bottom: 6px; }
+  .wave canvas { width: 100%; height: 100%; display: block; }
+  .wave .selbox { position: absolute; top: 0; bottom: 0; background: var(--sel); border-left: 1px solid var(--accent);
+                  border-right: 1px solid var(--accent); pointer-events: none; }
+  .ornote { text-align: center; color: var(--muted); font-size: 11px; margin: 4px 0 8px; }
+  @media (max-width: 700px) {
+    body { padding: 16px; }
+    .modes { grid-template-columns: 1fr 1fr; }
+    .pair { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+  <h1>mimetic-a0</h1>
+  <p class="sub">Text to audio for music: 48 kHz stereo, up to 16 s. <span id="info"></span>
+    Prompting guide: <a class="dl" href="https://github.com/micknoise/mimetic-a0/blob/main/docs/prompting.md" target="_blank">docs/prompting.md</a></p>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="generate">Generate</div>
+    <div class="tab" data-tab="retake">Retake</div>
+    <div class="tab" data-tab="repaint">Repaint</div>
+  </div>
+
+  <!-- ================= Generate ================= -->
+  <div class="panel active" id="panel-generate">
+    <p class="intro"><b>Text to sound.</b> Describe the sound; get several variations.</p>
+    <div class="field">
+      <label for="g-prompt">Prompt</label>
+      <textarea id="g-prompt" placeholder="e.g. boom bap drum loop, standard kit, swung, 90 BPM, 4 bars">boom bap drum loop, standard kit, swung, with ghost notes, 90 BPM, 4 bars</textarea>
+      <div class="chips" data-target="g-prompt">
+        <span class="chip" data-s="10.67">boom bap drum loop, standard kit, swung, with ghost notes, 90 BPM, 4 bars</span>
+        <span class="chip" data-s="7.74">house drum loop, dance kit, open hi-hats, 124 BPM, 4 bars</span>
+        <span class="chip" data-s="10.11">finger bass bassline, over Cm - Fm - G7, 95 BPM, C minor, 4 bars</span>
+        <span class="chip" data-s="12.0">warm pad held chords, chords Dm7 - G7 - Cmaj7, soft, 80 BPM, C major, 4 bars</span>
+        <span class="chip" data-s="8.73">analog mono lead synth melody, over Am - F - C - G, 110 BPM, A minor, 4 bars</span>
+        <span class="chip" data-s="4.0">marimba arpeggio, chords C - Am - F - G, 120 BPM, C major, 2 bars</span>
+        <span class="chip" data-s="3.0">grand piano chord, Cmaj7, block chord</span>
+        <span class="chip" data-s="3.0">single cello note, G3</span>
+        <span class="chip" data-s="1.0">808 kit kick drum hit, one-shot, hard</span>
+        <span class="chip" data-s="10.91">full mix with standard kit, finger bass and electric piano, hip hop, chords Fm7 - Bbm7, 88 BPM, Ab major, 4 bars</span>
+        <span class="chip" data-s="10.67">full mix with violins, cellos and basses, french horns and timpani, epic, chords Dm - Bb - C, 90 BPM, D minor, 4 bars</span>
+      </div>
+    </div>
+    <details>
+      <summary>Musical fields <span class="hint">(optional; added to the prompt the way the training captions say them)</span></summary>
+      <div class="row" style="margin-top:10px">
+        <div class="field"><label for="m-bpm">Tempo (BPM)</label><input type="number" id="m-bpm" min="40" max="220" step="1" placeholder="none"></div>
+        <div class="field"><label for="m-bars">Bars <span class="hint">(with BPM, sets the duration)</span></label>
+          <select id="m-bars"><option value="">none</option><option>1</option><option>2</option><option>4</option></select></div>
+        <div class="field"><label for="m-key">Key</label>
+          <select id="m-key"><option value="">none</option><option>C</option><option>Db</option><option>D</option><option>Eb</option><option>E</option><option>F</option><option>Gb</option><option>G</option><option>Ab</option><option>A</option><option>Bb</option><option>B</option></select></div>
+        <div class="field"><label for="m-mode">&nbsp;</label><select id="m-mode"><option>major</option><option>minor</option></select></div>
+      </div>
+      <div class="row">
+        <div class="field"><label for="m-chords">Chords <span class="hint">(e.g. Am7 - D9 - Gmaj7)</span></label><input type="text" id="m-chords" placeholder="none"></div>
+        <div class="field"><label for="m-feel">Feel</label>
+          <select id="m-feel"><option value="">none</option><option>straight</option><option>swung</option><option>heavily swung</option><option>laid-back</option></select></div>
+        <div class="field"><label for="m-density">Density</label>
+          <select id="m-density"><option value="">none</option><option>sparse</option><option>busy</option></select></div>
+        <div class="field"><label for="m-dyn">Dynamics</label>
+          <select id="m-dyn"><option value="">none</option><option>soft</option><option>loud</option></select></div>
+      </div>
+      <div class="hint" id="m-sent" style="margin-top:6px"></div>
+    </details>
+    <div class="row">
+      <div class="field">
+        <label for="g-seconds">Duration <span class="rangeval" id="g-seconds-v">10.67s</span></label>
+        <input type="range" id="g-seconds" min="0.5" max="16" step="0.01" value="10.67">
+      </div>
+      <div class="field">
+        <label for="g-n">Variations</label>
+        <input type="number" id="g-n" min="1" max="8" value="2">
+      </div>
+      <div class="field">
+        <label for="g-seed">Seed <span class="hint">(blank = random)</span></label>
+        <input type="number" id="g-seed" placeholder="random">
+      </div>
+    </div>
+    <details>
+      <summary>Advanced</summary>
+      <div class="row" style="margin-top:10px">
+        <div class="field">
+          <label for="g-steps">Steps <span class="rangeval" id="g-steps-v">50</span></label>
+          <input type="range" id="g-steps" min="10" max="150" step="1" value="50">
+        </div>
+        <div class="field">
+          <label for="g-cfg">CFG scale <span class="rangeval" id="g-cfg-v">6.0</span></label>
+          <input type="range" id="g-cfg" min="1" max="12" step="0.5" value="6.0">
+          <div class="hint">Lower (~3&ndash;4) gives more varied results at about the same prompt match.</div>
+        </div>
+        <div class="field">
+          <label for="g-apg">APG scale <span class="rangeval" id="g-apg-v">1.0</span></label>
+          <input type="range" id="g-apg" min="0" max="1" step="0.05" value="1.0">
+        </div>
+      </div>
+    </details>
+    <button class="go" id="g-go">Generate</button>
+    <div class="status" id="g-status"></div>
+    <div class="results" id="g-results"></div>
+  </div>
+
+  <!-- ================= Retake ================= -->
+  <div class="panel" id="panel-retake">
+    <p class="intro"><b>Re-generate a sound from a noisy copy of it.</b> The model starts from your audio with noise added and
+      generates towards the prompt: a low setting gives a close variation, a high one only keeps its broad shape.
+      The prompt should describe <b>the result you want</b> (what it should sound like), not the change.</p>
+    <div class="step"><div class="n">1 &middot; Your audio</div>
+      <input type="file" id="r-file" accept="audio/*">
+      <div id="r-orig" style="display:none;margin-top:8px"><audio controls id="r-orig-audio"></audio></div>
+    </div>
+    <div class="step"><div class="n">2 &middot; What the result should sound like</div>
+      <textarea id="r-prompt" placeholder="e.g. metallic snare hit, bright, short reverb"></textarea>
+    </div>
+    <div class="step"><div class="n">3 &middot; How much to change</div>
+      <input type="range" id="r-change" min="0" max="1" step="0.05" value="0.5">
+      <div class="hint">0 = almost your original &nbsp;&middot;&nbsp; <span class="rangeval" id="r-change-v">0.50</span>
+        &nbsp;&middot;&nbsp; 1 = ignores it, a fresh sound from the prompt</div>
+    </div>
+    <div class="row">
+      <div class="field"><label for="r-seed">Seed <span class="hint">(blank = random)</span></label><input type="number" id="r-seed" placeholder="random"></div>
+    </div>
+    <details>
+      <summary>Advanced</summary>
+      <div class="row" style="margin-top:10px">
+        <div class="field"><label for="r-steps">Steps <span class="rangeval" id="r-steps-v">50</span></label>
+          <input type="range" id="r-steps" min="10" max="150" step="1" value="50"></div>
+        <div class="field"><label for="r-cfg">CFG scale <span class="rangeval" id="r-cfg-v">6.0</span></label>
+          <input type="range" id="r-cfg" min="1" max="12" step="0.5" value="6.0"></div>
+        <div class="field"><label for="r-apg">APG scale <span class="rangeval" id="r-apg-v">1.0</span></label>
+          <input type="range" id="r-apg" min="0" max="1" step="0.05" value="1.0"></div>
+      </div>
+    </details>
+    <button class="go" id="r-go">Retake</button>
+    <div class="status" id="r-status"></div>
+    <div class="results" id="r-results"></div>
+  </div>
+
+  <!-- ================= Repaint ================= -->
+  <div class="panel" id="panel-repaint">
+    <p class="intro"><b>Regenerate one stretch of your audio and keep the rest exactly.</b> Drag across the waveform to pick the
+      stretch. The prompt describes <b>the whole clip</b> as it should sound, including what should happen in that stretch.</p>
+    <div class="step"><div class="n">1 &middot; Your audio</div>
+      <input type="file" id="p-file" accept="audio/*">
+      <div class="hint" id="p-cap"></div>
+    </div>
+    <div class="step" id="p-wave-step" style="display:none"><div class="n">2 &middot; Drag to select the stretch to regenerate</div>
+      <div class="wave" id="p-wave"><canvas id="p-canvas"></canvas><div class="selbox" id="p-sel"></div></div>
+      <audio controls id="p-orig-audio"></audio>
+      <div class="row" style="margin-top:8px">
+        <div class="field"><label for="p-start">From (s)</label><input type="number" id="p-start" min="0" step="0.01" value="0"></div>
+        <div class="field"><label for="p-end">To (s)</label><input type="number" id="p-end" min="0" step="0.01" value="1"></div>
+        <div class="field"><label for="p-softness">Crossfade (s) <span class="rangeval" id="p-softness-v">0.15</span></label>
+          <input type="range" id="p-softness" min="0" max="1" step="0.01" value="0.15"></div>
+      </div>
+    </div>
+    <div class="step"><div class="n">3 &middot; The whole clip, as it should sound</div>
+      <textarea id="p-prompt" placeholder="e.g. drum loop, 120 BPM, with a snare fill at the end"></textarea>
+    </div>
+    <div class="row">
+      <div class="field"><label for="p-seed">Seed <span class="hint">(blank = random)</span></label><input type="number" id="p-seed" placeholder="random"></div>
+    </div>
+    <details>
+      <summary>Advanced</summary>
+      <div class="row" style="margin-top:10px">
+        <div class="field"><label for="p-steps">Steps <span class="rangeval" id="p-steps-v">50</span></label>
+          <input type="range" id="p-steps" min="10" max="150" step="1" value="50"></div>
+        <div class="field"><label for="p-cfg">CFG scale <span class="rangeval" id="p-cfg-v">6.0</span></label>
+          <input type="range" id="p-cfg" min="1" max="12" step="0.5" value="6.0"></div>
+        <div class="field"><label for="p-apg">APG scale <span class="rangeval" id="p-apg-v">1.0</span></label>
+          <input type="range" id="p-apg" min="0" max="1" step="0.05" value="1.0"></div>
+      </div>
+    </details>
+    <button class="go" id="p-go">Repaint</button>
+    <div class="status" id="p-status"></div>
+    <div class="results" id="p-results"></div>
+  </div>
+
+<script>
+const $ = id => document.getElementById(id);
+
+// tabs
+document.querySelectorAll('.tab').forEach(t => t.onclick = () => {
+  document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(x => x.classList.remove('active'));
+  t.classList.add('active');
+  $('panel-' + t.dataset.tab).classList.add('active');
+});
+
+// live range readouts
+[['g-seconds','s'],['g-steps',''],['g-cfg',''],['g-apg',''],
+ ['r-change',''],['r-steps',''],['r-cfg',''],['r-apg',''],
+ ['p-softness','s'],['p-steps',''],['p-cfg',''],['p-apg','']].forEach(([id, suffix]) => {
+  const el = $(id), out = $(id + '-v');
+  if (!el || !out) return;
+  el.oninput = () => out.textContent = parseFloat(el.value).toFixed(el.step.includes('.') ? el.step.split('.')[1].length : 0) + suffix;
+  el.oninput();
+});
+
+// musical fields -> clauses in v4's caption order (loop_generator.windows.describe): chords, feel, density,
+// dynamics, BPM, key, bars. BPM + bars set the duration (4/4: bars x 240 / BPM), capped at the model's window.
+function fullPrompt() {
+  const base = $('g-prompt').value.trim().replace(/[,\s]+$/, '');
+  const c = [];
+  const ch = $('m-chords').value.trim().split(/\s*-\s*|\s+to\s+|,\s*/).filter(Boolean);
+  if (ch.length) c.push(ch.length > 1 ? 'chords ' + ch.join(' - ') : ch[0] + ' chord');
+  for (const id of ['m-feel', 'm-density', 'm-dyn']) if ($(id).value) c.push($(id).value);
+  if ($('m-bpm').value) c.push(`${Math.round($('m-bpm').value)} BPM`);
+  if ($('m-key').value) c.push(`${$('m-key').value} ${$('m-mode').value}`);
+  if ($('m-bars').value) c.push(`${$('m-bars').value} bar${$('m-bars').value === '1' ? '' : 's'}`);
+  return [base, ...c].filter(Boolean).join(', ');
+}
+function musicalUpdate() {
+  const bpm = parseFloat($('m-bpm').value), bars = parseInt($('m-bars').value);
+  const g = $('g-seconds');
+  if (bpm > 0 && bars > 0) {
+    const secs = bars * 240 / bpm, max = parseFloat(g.max);
+    g.value = Math.min(secs, max).toFixed(2); g.oninput();
+    $('m-sent').innerHTML = (secs > max ? `<b>${bars} bars at ${bpm} BPM is ${secs.toFixed(2)}s, longer than this model's ${max}s.</b> ` : '')
+      + 'Prompt sent: <i></i>';
+  } else $('m-sent').innerHTML = 'Prompt sent: <i></i>';
+  $('m-sent').querySelector('i').textContent = fullPrompt();
+}
+['m-bpm', 'm-bars', 'm-key', 'm-mode', 'm-chords', 'm-feel', 'm-density', 'm-dyn', 'g-prompt'].forEach(id => $(id).addEventListener('input', musicalUpdate));
+
+// model limits come from the server
+function applyInfo(info) {
+  const g = $('g-seconds');
+  g.max = info.max_seconds;
+  if (parseFloat(g.value) > info.max_seconds) { g.value = info.max_seconds; g.oninput(); }
+  $('info').textContent = `Running on ${info.device}.`;
+  $('p-cap').textContent = `Only the first ${info.max_seconds}s are used.`;
+  musicalUpdate();
+}
+fetch('/api/info').then(r => r.json()).then(applyInfo);
+
+// clickable example prompts (tested; see docs/prompting.md)
+document.querySelectorAll('.chips[data-target]').forEach(box => box.querySelectorAll('.chip').forEach(c =>
+  c.onclick = () => {
+    $(box.dataset.target).value = c.textContent;
+    ['m-bpm', 'm-bars', 'm-key', 'm-chords', 'm-feel', 'm-density', 'm-dyn'].forEach(id => $(id).value = '');
+    if (c.dataset.s) { $('g-seconds').value = c.dataset.s; $('g-seconds').oninput(); }
+    musicalUpdate();
+  }));
+
+function setStatus(id, msg, isErr) {
+  const el = $(id);
+  el.textContent = msg;
+  el.className = 'status' + (isErr ? ' err' : '');
+}
+const seedOf = id => $(id).value === '' ? -1 : $(id).value;
+
+function resultBox(title, b64, name, extra) {
+  const wrap = document.createElement('div'); wrap.className = 'result';
+  const src = 'data:audio/wav;base64,' + b64;
+  wrap.innerHTML = `<div class="meta"><span>${title}</span><a class="dl" download="${name}.wav" href="${src}">download</a></div>` +
+                   `<audio controls src="${src}"></audio>` + (extra || '');
+  return wrap;
+}
+function originalBox(file, title) {
+  const wrap = document.createElement('div'); wrap.className = 'result orig';
+  wrap.innerHTML = `<div class="meta"><span>${title || 'your original'}</span></div><audio controls src="${URL.createObjectURL(file)}"></audio>`;
+  return wrap;
+}
+async function post(url, form) {
+  const res = await fetch(url, { method: 'POST', body: form });
+  if (!res.ok) throw new Error(`${res.status}: ${(await res.text()).slice(0, 300)}`);
+  return res.json();
+}
+
+// ================= Generate =================
+$('g-go').onclick = async () => {
+  const btn = $('g-go'); btn.disabled = true;
+  $('g-results').innerHTML = '';
+  setStatus('g-status', 'generating…');
+  try {
+    const f = new FormData();
+    Object.entries({ prompt: fullPrompt(), seconds: $('g-seconds').value, steps: $('g-steps').value,
+      cfg_scale: $('g-cfg').value, seed: seedOf('g-seed'), n: $('g-n').value, apg_scale: $('g-apg').value }).forEach(([k, v]) => f.append(k, v));
+    const data = await post('/api/generate', f);
+    setStatus('g-status', `done — seed ${data.seed}`);
+    data.results.forEach(r => $('g-results').appendChild(resultBox(`variation ${r.index + 1}`, r.audio_b64, `gen_${data.seed}_${r.index}`)));
+  } catch (e) { setStatus('g-status', 'error: ' + e.message, true); }
+  finally { btn.disabled = false; }
+};
+
+// ================= Retake =================
+$('r-file').onchange = () => {
+  const x = $('r-file').files[0]; if (!x) return;
+  $('r-orig-audio').src = URL.createObjectURL(x); $('r-orig').style.display = 'block';
+};
+$('r-go').onclick = async () => {
+  const x = $('r-file').files[0];
+  if (!x) { setStatus('r-status', 'choose an audio file first', true); return; }
+  if (!$('r-prompt').value.trim()) { setStatus('r-status', 'describe what the result should sound like', true); return; }
+  const btn = $('r-go'); btn.disabled = true; $('r-results').innerHTML = '';
+  setStatus('r-status', 'retaking…');
+  try {
+    const f = new FormData();
+    f.append('file', x);
+    Object.entries({ prompt: $('r-prompt').value, change_amount: $('r-change').value, steps: $('r-steps').value,
+      cfg_scale: $('r-cfg').value, seed: seedOf('r-seed'), apg_scale: $('r-apg').value }).forEach(([k, v]) => f.append(k, v));
+    const data = await post('/api/retake', f);
+    setStatus('r-status', `done — seed ${data.seed}`);
+    $('r-results').appendChild(originalBox(x));
+    $('r-results').appendChild(resultBox(`retake (change ${$('r-change').value})`, data.audio_b64, `retake_${data.seed}`));
+  } catch (e) { setStatus('r-status', 'error: ' + e.message, true); }
+  finally { btn.disabled = false; }
+};
+
+// ================= Repaint =================
+let pDur = 0;
+function drawSel() {
+  const s = parseFloat($('p-start').value) || 0, e = parseFloat($('p-end').value) || 0, box = $('p-sel');
+  if (!pDur || e <= s) { box.style.display = 'none'; return; }
+  box.style.display = 'block';
+  box.style.left = (100 * s / pDur) + '%'; box.style.width = (100 * (e - s) / pDur) + '%';
+}
+$('p-file').onchange = async () => {
+  const x = $('p-file').files[0]; if (!x) return;
+  $('p-orig-audio').src = URL.createObjectURL(x);
+  $('p-wave-step').style.display = 'block';
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  const buf = await ctx.decodeAudioData(await x.arrayBuffer());
+  pDur = buf.duration;
+  const cv = $('p-canvas'), w = cv.clientWidth, h = cv.clientHeight;
+  cv.width = w * devicePixelRatio; cv.height = h * devicePixelRatio;
+  const g = cv.getContext('2d'); g.scale(devicePixelRatio, devicePixelRatio);
+  const d = buf.getChannelData(0), step = Math.max(1, Math.floor(d.length / w));
+  g.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#6ea8ff';
+  for (let i = 0; i < w; i++) {
+    let mn = 1, mx = -1;
+    for (let j = i * step; j < Math.min(d.length, (i + 1) * step); j++) { const v = d[j]; if (v < mn) mn = v; if (v > mx) mx = v; }
+    g.fillRect(i, (1 - mx) * h / 2, 1, Math.max(1, (mx - mn) * h / 2));
+  }
+  $('p-start').max = $('p-end').max = pDur.toFixed(2);
+  $('p-start').value = (pDur * 0.5).toFixed(2); $('p-end').value = (pDur * 0.75).toFixed(2);
+  drawSel();
+};
+(() => {
+  const wave = $('p-wave'); let down = null;
+  const t = ev => Math.max(0, Math.min(pDur, (ev.clientX - wave.getBoundingClientRect().left) / wave.clientWidth * pDur));
+  wave.onpointerdown = ev => { if (!pDur) return; down = t(ev); wave.setPointerCapture(ev.pointerId); };
+  wave.onpointermove = ev => { if (down === null) return; const x = t(ev);
+    $('p-start').value = Math.min(down, x).toFixed(2); $('p-end').value = Math.max(down, x).toFixed(2); drawSel(); };
+  wave.onpointerup = () => { down = null; };
+  ['p-start', 'p-end'].forEach(id => $(id).addEventListener('input', drawSel));
+})();
+$('p-go').onclick = async () => {
+  const x = $('p-file').files[0];
+  if (!x) { setStatus('p-status', 'choose an audio file first', true); return; }
+  if (!(parseFloat($('p-end').value) > parseFloat($('p-start').value))) { setStatus('p-status', 'select a stretch on the waveform first', true); return; }
+  const btn = $('p-go'); btn.disabled = true; $('p-results').innerHTML = '';
+  setStatus('p-status', 'repainting…');
+  try {
+    const f = new FormData();
+    f.append('file', x);
+    Object.entries({ prompt: $('p-prompt').value, mask_start: $('p-start').value, mask_end: $('p-end').value,
+      softness: $('p-softness').value, steps: $('p-steps').value, cfg_scale: $('p-cfg').value, seed: seedOf('p-seed'),
+      apg_scale: $('p-apg').value }).forEach(([k, v]) => f.append(k, v));
+    const data = await post('/api/repaint', f);
+    setStatus('p-status', `done — seed ${data.seed}, regenerated ${$('p-start').value}–${$('p-end').value} s`);
+    $('p-results').appendChild(originalBox(x));
+    $('p-results').appendChild(resultBox('repainted', data.audio_b64, `repaint_${data.seed}`));
+  } catch (e) { setStatus('p-status', 'error: ' + e.message, true); }
+  finally { btn.disabled = false; }
+};
+</script>
+</body>
+</html>

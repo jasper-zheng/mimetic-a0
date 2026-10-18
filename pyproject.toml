@@ -1,0 +1,47 @@
+[project]
+name = "mimetic-a0"
+version = "0.1"
+description = "mimetic-a0 (cc0-sampler v4), a text-to-audio model for music trained only on CC0 and synthetic audio. CLI and local web UI."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Mick Grierson" }]
+requires-python = ">=3.10,<3.12"
+dependencies = [
+    # stock stable-audio-tools at the commit the model was trained and tested with
+    "stable-audio-tools @ git+https://github.com/Stability-AI/stable-audio-tools@3241adba4fc2a85cf5b29d9eb68d42f40a28e820",
+    "torch==2.7.1",
+    "torchaudio==2.7.1",
+    "transformers>=4.40,<5",   # 5.x's T5 attention mask overflows with stable-audio-tools' fp16 T5
+    "numpy<2",                 # stable-audio-tools pins PyWavelets 1.4.1, built against numpy 1.x
+    "pytorch_lightning==2.5.5",  # imported by stable-audio-tools at load time (its LoRA module), not used here
+    "huggingface_hub",
+    "soundfile",
+    "fastapi",
+    "uvicorn",
+    "python-multipart",
+]
+
+[project.scripts]
+mimetic-a0 = "mimetic_a0.cli:main"
+mimetic-a0-webui = "mimetic_a0.webui.server:main"
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["mimetic_a0*"]
+
+[tool.setuptools.package-data]
+"mimetic_a0.webui" = ["index.html"]
+
+# Same split as stable-audio-tools: CUDA 12.6 wheels on x86-64 Linux, PyPI wheels elsewhere (macOS
+# wheels include Apple Silicon / MPS support). For RTX 50xx (Blackwell) cards see the README.
+[tool.uv.sources]
+torch = [{ index = "pytorch-cu126", marker = "sys_platform == 'linux' and platform_machine == 'x86_64'" }]
+torchaudio = [{ index = "pytorch-cu126", marker = "sys_platform == 'linux' and platform_machine == 'x86_64'" }]
+
+[[tool.uv.index]]
+name = "pytorch-cu126"
+url = "https://download.pytorch.org/whl/cu126"
+explicit = true
