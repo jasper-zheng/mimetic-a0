@@ -19,9 +19,9 @@ A text-to-audio model for music, trained only on audio with a clean licence: Fre
 | | fp32 (`model.safetensors`, 2.0 GB) | fp16 (`model.fp16.safetensors`, 1.0 GB) |
 |---|---|---|
 | NVIDIA RTX PRO 6000 | 1.7 s | 0.4 s |
-| Apple M1 Max (32 GB) | 6.7 s | 8.9 s |
+| Apple M1 Max (32 GB) | 6.7 s | 6.7 s |
 
-The fp16 version (`--half`) needs 2.5 GB of GPU memory against 4.4 GB for fp32. It is four times faster on an NVIDIA GPU; on a Mac it saves memory but is slower than fp32. Loading the model adds about 10 s to each command-line run; the web UI loads it once.
+The fp16 version (`--half`) needs 2.5 GB of GPU memory against 4.4 GB for fp32. It is four times faster on an NVIDIA GPU, whose tensor cores do fp16 arithmetic at several times the fp32 rate. On the M1 Max it runs at the same speed as fp32 and only saves memory: its GPU does fp16 matrix multiplication at the same rate as fp32 (we measured 7.1 and 6.6 TFLOPS), and the diffusion transformer's time is mostly matrix multiplication. Loading the model adds about 10 s to each command-line run; the web UI loads it once.
 
 **A base for fine-tuning.** mimetic-a0 is also intended as a base model for fine-tuning, and we will be releasing updates for this.
 
