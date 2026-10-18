@@ -91,7 +91,6 @@ single cello note, G3
 
 Set the duration to the bars you ask for: seconds = bars × 240 ÷ BPM. 50 steps and CFG 6 (the defaults) are what it was tested with. Results vary by seed, so ask for several variations.
 
-
 ## Limits
 
 - **Music first.** SFX, foley and field recordings are weak.
