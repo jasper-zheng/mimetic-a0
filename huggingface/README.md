@@ -83,7 +83,7 @@ It does not load in ComfyUI's Stable Audio nodes, which expect Stable Audio Open
 
 ## Prompting
 
-The model learned almost everything it knows from captions written by its own data generators, so it follows that wording best. **[PROMPTING.md](PROMPTING.md)** lists every instrument, style and clause it knows, with tested examples. In short, a prompt is what it is, then the music, then tempo, key and length, and the duration should match the bars (seconds = bars × 240 ÷ BPM):
+The model learned almost everything it knows from captions written by its own data generators, so it follows that wording best. **[PROMPTING.md](https://huggingface.co/micknoisemachine/mimetic-a0/blob/main/PROMPTING.md)** lists every instrument, style and clause it knows, with tested examples. In short, a prompt is what it is, then the music, then tempo, key and length, and the duration should match the bars (seconds = bars × 240 ÷ BPM):
 
 ```
 hip hop drum loop, standard kit, swung, with ghost notes, 90 BPM, 4 bars
@@ -136,4 +136,4 @@ For making samples and parts for music: loops, one-shots, basslines, chords, mel
 
 ## Licence
 
-MIT ([LICENSE](LICENSE)) for the weights, including the ACE-Step 1.5 VAE weights inside them, which are MIT-licensed by their authors. T5-base (Apache 2.0) is downloaded separately at run time. See [NOTICE](NOTICE) for credits.
+MIT ([LICENSE](https://huggingface.co/micknoisemachine/mimetic-a0/blob/main/LICENSE)) for the weights, including the ACE-Step 1.5 VAE weights inside them, which are MIT-licensed by their authors. T5-base (Apache 2.0) is downloaded separately at run time. See [NOTICE](https://huggingface.co/micknoisemachine/mimetic-a0/blob/main/NOTICE) for credits.
