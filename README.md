@@ -40,7 +40,7 @@ Then open http://127.0.0.1:8799. It picks the best device (CUDA, then Apple Sili
 - **Retake:** regenerates uploaded audio from a noisy copy of it. The prompt describes the result you want; the slider sets how far it may move from your audio.
 - **Repaint:** regenerates a stretch you select on the waveform and keeps the rest of your audio exactly, crossfaded at the edges.
 
-Options: `--port 9000`, `--host 0.0.0.0` (serve your network, with no authentication), `--half` (fp16 weights: less memory, faster), `--device cpu`, `--model <folder>` (load local weights instead of downloading).
+Options: `--port 9000`, `--host 0.0.0.0` (serve your network, with no authentication), `--half` (fp16 weights: less memory, faster on NVIDIA GPUs), `--device cpu`, `--model <folder>` (load local weights instead of downloading).
 
 ## Command line
 
@@ -82,7 +82,7 @@ Set the duration to the bars you ask for: seconds = bars × 240 ÷ BPM. 50 steps
 
 ## Speed and memory
 
-The model has 511M parameters: a 326M diffusion transformer plus the autoencoder (VAE). Generating one clip peaked at 4.4 GB of GPU memory in fp32 and 2.5 GB with `--half` (measured on CUDA; an Apple Silicon Mac uses about the same amount of its unified memory). On an RTX PRO 6000, a 12 s clip at 50 steps takes 1.7 s in fp32 and 0.4 s with `--half`. The CPU works too: a 3 s clip took 18 s on a many-core workstation CPU.
+The model has 511M parameters: a 326M diffusion transformer plus the autoencoder (VAE). Generating one clip peaked at 4.4 GB of GPU memory in fp32 and 2.5 GB with `--half` (measured on CUDA; an Apple Silicon Mac uses about the same amount of its unified memory). On an RTX PRO 6000, a 12 s clip at 50 steps takes 1.7 s in fp32 and 0.4 s with `--half`. On an M1 Max MacBook Pro (32 GB) it takes 6.7 s in fp32 and 8.9 s with `--half`, so on a Mac `--half` only saves memory; loading the model adds about 10 s to each CLI run. The CPU works too: a 3 s clip took 18 s on a many-core workstation CPU.
 
 The same seed gives different audio on CUDA, Apple Silicon and the CPU, and with or without `--half`, because each draws its starting noise differently.
 

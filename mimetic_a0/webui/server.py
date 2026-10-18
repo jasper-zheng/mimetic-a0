@@ -175,7 +175,7 @@ def main():
     ap.add_argument("--port", type=int, default=8799)
     ap.add_argument("--model", default=REPO_ID, help="Hugging Face repo id or local folder")
     ap.add_argument("--device", help="cuda, mps or cpu (default: best available)")
-    ap.add_argument("--half", action="store_true", help="fp16 weights: less memory, faster")
+    ap.add_argument("--half", action="store_true", help="fp16 weights: less memory, faster on NVIDIA GPUs")
     a = ap.parse_args()
 
     import uvicorn

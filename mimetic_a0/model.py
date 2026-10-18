@@ -41,8 +41,8 @@ def _apg_on_cpu(project):
 
 def load_model(source: str = REPO_ID, device: str | None = None, half: bool = False):
     """-> (model, config). `source` is a Hugging Face repo id or a folder holding model_config.json and
-    model.safetensors. half=True loads the fp16 weights and runs in fp16 (less memory, faster on GPU and
-    Apple Silicon; a seed gives a slightly different take than in fp32)."""
+    model.safetensors. half=True loads the fp16 weights and runs in fp16 (less memory, faster on NVIDIA GPUs
+    but not on Apple Silicon; a seed gives a slightly different take than in fp32)."""
     device = pick_device(device)
     config_path, weights_path = _files(source, half)
     config = json.loads(config_path.read_text())
