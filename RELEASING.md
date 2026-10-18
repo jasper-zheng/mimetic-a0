@@ -7,7 +7,7 @@ The packages were built and tested on the training workstation (Linux, CUDA, and
 ## What is where
 
 - This repo (`micknoise/mimetic-a0`, private on GitHub): the CLI (`mimetic-a0`), the web UI (`mimetic-a0-webui`) and the docs. `huggingface/` holds the text files of the Hugging Face repo: model card (`README.md`), `PROMPTING.md` (the same file as `docs/prompting.md`), `LICENSE`, `NOTICE`, `model_config.json` and `SHA256SUMS`.
-- The large files are on the workstation `mimetic@100.124.240.83` (reached over Tailscale) in `/home/mimetic/workspace/mimetic-a0-hf-build/hf/`: `model.safetensors` (2.0 GB, fp32), `model.fp16.safetensors` (1.0 GB) and `examples/*.wav` (14 clips, 28 MB).
+- The large files are on the training workstation in `$BUILD/hf/` (set `WORKSTATION` to its SSH `user@host` and `BUILD` to the build folder there): `model.safetensors` (2.0 GB, fp32), `model.fp16.safetensors` (1.0 GB) and `examples/*.wav` (14 clips, 28 MB).
 - The model is cc0-sampler v4, checkpoint "anneal 120k". `model.safetensors` is bit-identical to it. Do not modify, re-export or re-quantise the weights.
 
 ## 1. Set up
@@ -26,9 +26,9 @@ Expect `2.7.1 mps True`. If `uv sync` fails on any package, report the exact err
 
 ```bash
 mkdir -p release
-rsync -av --progress mimetic@100.124.240.83:/home/mimetic/workspace/mimetic-a0-hf-build/hf/model.safetensors \
-  mimetic@100.124.240.83:/home/mimetic/workspace/mimetic-a0-hf-build/hf/model.fp16.safetensors \
-  mimetic@100.124.240.83:/home/mimetic/workspace/mimetic-a0-hf-build/hf/examples release/
+rsync -av --progress $WORKSTATION:$BUILD/hf/model.safetensors \
+  $WORKSTATION:$BUILD/hf/model.fp16.safetensors \
+  $WORKSTATION:$BUILD/hf/examples release/
 cp huggingface/* release/
 (cd release && shasum -a 256 -c SHA256SUMS)     # every line must say OK
 ```
@@ -89,7 +89,7 @@ Report: timings, peak memory if easy to see (Activity Monitor), any fallback war
 
 ## 4. Listen to the example clips
 
-The 14 clips in `release/examples/` were picked by automatic checks (CLAP instrument class, tempo, pitch, chord), not by ear. Ask the user to listen to them, for example with `open release/examples`. Each one comes from the prompt shown next to it in the model card's Examples table (`release/README.md`). If the user wants one replaced, the workstation has a second seed for every prompt in `/home/mimetic/workspace/mimetic-a0-hf-build/example_takes/` (`NN_s1_*` and `NN_s2_*`). Copy the chosen take over the file of the same name in `release/examples/`, then regenerate `SHA256SUMS` for the examples and copy it back to `huggingface/SHA256SUMS`.
+The 14 clips in `release/examples/` were picked by automatic checks (CLAP instrument class, tempo, pitch, chord), not by ear. Ask the user to listen to them, for example with `open release/examples`. Each one comes from the prompt shown next to it in the model card's Examples table (`release/README.md`). If the user wants one replaced, the workstation has a second seed for every prompt in `$BUILD/example_takes/` (`NN_s1_*` and `NN_s2_*`). Copy the chosen take over the file of the same name in `release/examples/`, then regenerate `SHA256SUMS` for the examples and copy it back to `huggingface/SHA256SUMS`.
 
 ## 5. Upload to Hugging Face (private)
 
