@@ -81,6 +81,10 @@ audio, seed = generate(model, config, "house drum loop, dance kit, open hi-hats,
 
 The weights also load in stock stable-audio-tools (`get_pretrained_model("micknoisemachine/mimetic-a0")`), at commit `3241adb` or later.
 
+## Max/MSP
+
+**[mimetic_a0/maxmsp](mimetic_a0/maxmsp/README.md)** exports the model to run inside Max/MSP on Apple Silicon, with the `neural.gen~` object from [neural_tilde](https://github.com/jasper-zheng/neural_tilde): an 8 s clip in about 1.4 s on an M4 Max. The export has its own environment (PyTorch 2.14 and ExecuTorch 1.5.1), separate from the one above.
+
 ## Prompting
 
 The model follows the wording of its training captions best. **[docs/prompting.md](docs/prompting.md)** lists every instrument, style and clause it knows, with tested examples. In short, a prompt is what it is, then the music, then tempo, key and length:

@@ -31,6 +31,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 include = ["mimetic_a0*"]
+exclude = ["mimetic_a0.maxmsp*"]   # the Max/MSP export scripts have their own environment (maxmsp/pyproject.toml)
 
 [tool.setuptools.package-data]
 "mimetic_a0.webui" = ["index.html"]

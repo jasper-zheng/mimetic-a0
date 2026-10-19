@@ -1,0 +1,31 @@
+# Export environment for mimetic-a0 -> Max/MSP (neural_tilde's neural.gen~). Separate from mimetic-a0's
+# own environment: neural_tilde / ExecuTorch need torch 2.14, mimetic-a0 + stable-audio-tools pin 2.7.1.
+# Not a package: `uv sync` here only builds .venv/ for the scripts in this folder.
+[project]
+name = "mimetic-a0-maxmsp"
+version = "0.1"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    "mimetic-a0",
+    "neural-tilde>=0.1.0",     # the exporter (GenModule); CC BY-NC 4.0, see README
+    # neural.gen~ (neural_tilde 0.1.0) links the ExecuTorch 1.5.1 runtime. The PyPI wheel ships the
+    # MLX backend (AOT partitioner + runtime pybindings), so no source build is needed.
+    "executorch==1.5.1",
+    "torch==2.14.0",
+    "torchaudio==2.11.0",
+    "transformers>=4.40,<5",   # as mimetic-a0: 5.x's T5 attention mask overflows with fp16 T5
+]
+
+[tool.uv]
+package = false
+override-dependencies = [
+    "torch==2.14.0",       # mimetic-a0 and stable-audio-tools pin torch==2.7.1
+    "torchaudio==2.11.0",  # ... and torchaudio==2.7.1; 2.11.0 is the last torchaudio release
+    "torchvision==0.29.0", # pulled in by v-diffusion-pytorch; the build paired with torch 2.14
+    "torchao==0.18.0",     # executorch 1.5.1 needs >=0.18,<0.19
+    "numpy>=2",            # executorch needs numpy>=2; mimetic-a0 pins <2 only for PyWavelets 1.4.1
+    "PyWavelets>=1.6",     # numpy-2 builds; stable-audio-tools only uses it for wavelet pretransforms
+]
+
+[tool.uv.sources]
+mimetic-a0 = { path = "../..", editable = true }

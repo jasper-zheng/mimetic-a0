@@ -1,0 +1,10 @@
+{
+  "type": "tokenizers-cpp",
+  "tokenizer_file": "mimetic-a0_t2a_8s_24steps.tokenizer.json",
+  "max_length": 128,
+  "padding": "max_length",
+  "pad_token": "<pad>",
+  "padding_side": "right",
+  "ids_key": "input_ids",
+  "mask_key": "attention_mask"
+}

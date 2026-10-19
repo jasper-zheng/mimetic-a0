@@ -1,0 +1,80 @@
+{
+  "kind": "gen",
+  "executorch_version": "1.5.1",
+  "delegate": "mlx",
+  "seed": 0,
+  "methods": {
+    "forward": {
+      "inputs": [
+        {
+          "name": "input_ids",
+          "role": "condition",
+          "shape": [
+            1,
+            128
+          ],
+          "dtype": "int64"
+        },
+        {
+          "name": "attention_mask",
+          "role": "condition",
+          "shape": [
+            1,
+            128
+          ],
+          "dtype": "int32"
+        },
+        {
+          "name": "seconds_total",
+          "role": "attribute",
+          "shape": [
+            1
+          ],
+          "dtype": "float32",
+          "default": 8.0,
+          "min": 0.0,
+          "max": 8.0,
+          "description": "Duration conditioning in seconds. Output stays the full export length; audio after seconds_total + 6 s is silent."
+        },
+        {
+          "name": "cfg_scale",
+          "role": "attribute",
+          "shape": [
+            1
+          ],
+          "dtype": "float32",
+          "default": 6.0,
+          "min": 1.0,
+          "max": 15.0,
+          "description": "Classifier-free guidance scale (APG). 1 = no guidance."
+        },
+        {
+          "name": "init_noise",
+          "role": "noise",
+          "shape": [
+            1,
+            64,
+            350
+          ],
+          "dtype": "float32"
+        }
+      ],
+      "output": {
+        "name": "audio",
+        "role": "buffer",
+        "dtype": "float32",
+        "shape": [
+          1,
+          2,
+          384000
+        ],
+        "channels": 2,
+        "length": 384000,
+        "sample_rate": 48000
+      },
+      "batch": 1,
+      "dynamic_time": false
+    }
+  },
+  "attributes": []
+}

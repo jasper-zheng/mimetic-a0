@@ -4,3 +4,5 @@ __pycache__/
 *.wav
 outs/
 release/
+
+.DS_Store
